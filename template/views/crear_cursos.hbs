@@ -1,0 +1,57 @@
+{{>header}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 offset-md-2">
+            {{{registroCursoExitoso success}}}
+            <form action="/crearCursos" method="POST" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <legend>Formulario para Crear un Curso</legend>
+                </div>
+                <div class="form-group row">
+                    <label for="id" class="col-sm-2 col-form-label">ID</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" id="id" name="id" placeholder="ID del curso" required>
+                    </div>
+                    <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del Curso" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="valor" class="col-sm-2 offset-md-3 col-form-label">Valor</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" id="valor" name="valor" placeholder="Valor" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                </div>
+                <div class="form-group row">
+                    <label for="modalidad" class="col-sm-2 col-form-label">Modalidad</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="modalidad" name="modalidad">
+                            <option>-</option>
+                            <option>Virtual</option>
+                            <option>Presencial</option>
+                        </select>
+                    </div>
+                    <label for="intensidad_horaria" class="col-sm-2 col-form-label">Intensidad Horaria</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" id="intensidad_horaria" name="intensidad_horaria" placeholder="Intensidad Horaria">
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{{>footer}}

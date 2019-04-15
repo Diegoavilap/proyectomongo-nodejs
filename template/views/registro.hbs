@@ -1,0 +1,56 @@
+{{>header}}
+<br />
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-md-2">
+                {{{inscripcionExitosa success}}}
+                <form action="/registro" method="POST" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <legend>Formulario para Registrarse en un Curso</legend>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cedula" class="col-sm-2 col-form-label">Documento de Identidad</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
+                        </div>
+                        <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="correo" class="col-sm-2 col-form-label">Correo</label>
+                        <div class="col-sm-4">
+                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" required>
+                        </div>
+                        <label for="telefono" class="col-sm-2 col-form-label">Teléfono</label>
+                        <div class="col-sm-4">
+                            <input type="phone" class="form-control" id="telefono" name="telefono" placeholder="Teléfono"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="curso_id" class="col-sm-2 offset-md-3 col-form-label">Curso</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="curso_id" name="curso_id" required>
+                                <option>-</option>
+                                {{{opciones_cursos}}}
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+{{>footer}}

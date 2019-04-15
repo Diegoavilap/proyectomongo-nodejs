@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const hbs = require('hbs')
-const Estudiante = require('./../models/estudiante');
+const Estudiante = require('../models/curso');
 const dirViews = path.join(__dirname, '../../template/views');
 const dirPartials = path.join(__dirname, '../../template/partials');
 
@@ -22,69 +22,44 @@ app.get('/', (req, res) =>{
     res.render('index');
 });
 
-app.post('/', (req, res) => {
-    let estudiante = new Estudiante({
-        nombre : req.body.nombre,
-        matematicas : req.body.matematicas,
-        ingles: req.body.ingles,
-        programacion: req.body.programacion
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+app.get('/crearCursos', (req, res) => {
+    res.render('crear_cursos', {
+        success: 'false'
     });
-    estudiante.save( (error, result)=>{
-        if (error) {
-            res.render('indexpost', {
-                mostrar: error
-            });
-        }
-        res.render('indexpost', {
-            mostrar: result
-        });
-    })
+});
+app.post('/crearCursos', (req, res) => {
+
+    res.render('crear_cursos', {
+        success: funciones.crear(req.body)
+    });
 });
 
-app.get('/vernotas', (re, res) =>{
-    Estudiante.find({}).exec((err, resultado) =>{
-        if (err) {
-            return console.log(err)
-        }
-        if (!resultado) {
-            res.render('vernotas',{
-                listado: "Nombre no encontrado"
-            })
-        }
-        res.render('vernotas',{
-            listado: resultado
-        })
-    })
+app.get('/listarCursos', (req, res) => {
+    res.render('listar');
 });
 
-app.get('/actualizar', (req, res) =>{
-    res.render('actualizar');
-})
-app.post('/actualizar', (req, res) =>{
-    Estudiante.findOneAndUpdate({nombre: req.body.nombre}, req.body, {new: true}, (error, resultado) => {
-        if (error) {
-            return console.log(error);
-        }
-        res.render('actualizar', {
-            nombre: resultado.nombre,
-            matematicas: resultado.matematicas,
-            ingles: resultado.ingles,
-            programacion: resultado.programacion,
-
-        });
-    })
+app.get('/registro', (req, res) => {
+    res.render('registro', {
+        success: 'false'
+    });
 });
-app.post('/eliminar', (req, res) =>{
-    Estudiante.findOneAndDelete({nombre: req.body.nombre}, req.body, (error, resultado) => {
-        if (error) {
-            return console.log(error);
-        }
-        res.render('eliminar', {
-            nombre: resultado.nombre
 
-        });
-    })
+app.post('/registro', (req, res) => {
+
+    res.render('registro', {
+        success: funciones.registrar(req.body)
+    });
 });
+
+app.get('/verInscritos', (req, res) => {
+    res.render('inscritos');
+});
+
+
 app.get('*', (req, res) => {
     res.render('error', {
         titulo: 'Error 404'
