@@ -1,0 +1,26 @@
+{{>header}}
+        <h1 class="text-center">Bienvenido!!</h1>
+        <form action="/" method="post">
+                <div class="form-group">
+                <label for="exampleFormControlInput1">Nombre</label>
+                <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+                <div class="row">
+                        <div class="col">
+                        <label for="exampleFormControlInput1">Nota 1</label>
+                        <input type="number" class="form-control" name="matematicas" placeholder="Nota 1" required>
+                        </div>
+                        <div class="col">
+                        <label for="exampleFormControlInput1">Nota 2</label>
+                        <input type="number" class="form-control" name="ingles" placeholder="Nota 2" required>
+                        </div>
+                        <div class="col">
+                        <label for="exampleFormControlInput1">Nota 3</label>
+                        <input type="number" class="form-control" name="programacion" placeholder="Nota 3" required>
+                        </div>
+                </div>
+                </div>
+                <button class="btn btn-dark">Calcular</button>
+                
+        
+        </form>
+{{>footer}}
