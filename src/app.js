@@ -25,7 +25,7 @@ app.use(require('./routes/index'));
 
 
 
-mongoose.connect('mongodb://localhost:27017/cursosVirtuales', {useNewUrlParser: true}, (error, result) =>{
+mongoose.connect(process.env.URLDB, {useNewUrlParser: true}, (error, result) =>{
     if (error) {
         return console.log(error);
     }
