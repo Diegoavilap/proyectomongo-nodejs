@@ -10,22 +10,19 @@ hbs.registerHelper('registroCursoExitoso', (success) => {
                     </button>
                  </div>`;
         return texto;
-    } else if (success === 'ya_existe') {
+    } else{
         let texto = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Ya Existe un Curso con ese ID ingresado!</strong>
+                    <strong>${success}!</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                  </div>`;
         return texto;
-    } else {
-        return '';
     }
 
 });
 
-hbs.registerHelper('listar', () => {
-    listadoCursos = require('./cursos.json');
+hbs.registerHelper('listar', (listadoCursos) => {
     let texto = "<table class='table table-striped table-hover'>" +
         "<thead class='thead-dark'>" +
         "<th>ID</th>" +
@@ -54,8 +51,8 @@ hbs.registerHelper('listar', () => {
     return texto;
 });
 
-hbs.registerHelper('listar_interesado', () => {
-    listadoCursos = require('./cursos.json');
+hbs.registerHelper('listar_interesado', (listadoCursos) => {
+    
     let texto = '<div class="accordion" id="accordionExample">';
 
     listadoCursos.forEach(curso => {

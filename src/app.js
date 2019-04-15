@@ -10,7 +10,6 @@ const directorioPublico = path.join(__dirname, '../public');
 const dirNode_modules = path.join(__dirname, '../node_modules')
 
 
-app.use('/css', express.static(dirNode_modules + '/bootstrap/dist/css'));
 app.use('/js', express.static(dirNode_modules + '/jquery/dist'));
 app.use('/js', express.static(dirNode_modules + '/popper.js/dist'));
 
@@ -26,7 +25,7 @@ app.use(require('./routes/index'));
 
 
 
-mongoose.connect('mongodb://localhost:27017/asignaturas', {useNewUrlParser: true}, (error, result) =>{
+mongoose.connect('mongodb://localhost:27017/cursosVirtuales', {useNewUrlParser: true}, (error, result) =>{
     if (error) {
         return console.log(error);
     }

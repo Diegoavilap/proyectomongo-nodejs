@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const cursoSchema = new Schema({
+    id:{
+        type: Number,
+        require: true,
+        unique: true
+    },
     nombre:{
         type: String,
         require: true
@@ -12,14 +17,13 @@ const cursoSchema = new Schema({
     },
     valor:{
         type: Number,
-            require: true
+        require: true
     },
     modalidad:{
         type: String
     },
     intensidad_horaria:{
-        type: String,
-            require: true
+        type: String
     },
     estado:{
         type: String,
