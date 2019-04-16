@@ -25,12 +25,13 @@ app.use(require('./routes/index'));
 
 
 
-mongoose.connect(process.env.URLDB, {useNewUrlParser: true}, (error, result) =>{
-    if (error) {
-        return console.log(error);
-    }
-    console.log('conectado');
-})
+mongoose.connect(process.env.URLDB, {useNewUrlParser: true}, (err, resultado) => {
+	if (err){
+		return console.log(err)
+	}
+	console.log("conectado")
+});
+
 app.listen(process.env.PORT, () =>{
     console.log('servidor en el puerto '+ process.env.PORT);
 });
