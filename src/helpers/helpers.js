@@ -1,18 +1,18 @@
 const hbs = require('hbs');
 
 
-hbs.registerHelper('registroCursoExitoso', (success) => {
+hbs.registerHelper('registroCursoExitoso', (success, message) => {
     if (success === 'ok') {
         let texto = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Registro de Usuario exitoso!</strong>
+                    <strong>${message}!</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                  </div>`;
         return texto;
-    } else{
+    } else if (success === 'error') {
         let texto = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>${success}!</strong>
+                    <strong>${message}</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -23,62 +23,70 @@ hbs.registerHelper('registroCursoExitoso', (success) => {
 });
 
 hbs.registerHelper('listar', (listadoCursos) => {
-    let texto = "<table class='table table-striped table-hover'>" +
-        "<thead class='thead-dark'>" +
-        "<th>ID</th>" +
-        "<th>Nombre</th>" +
-        "<th>Descripción</th>" +
-        "<th>Valor</th>" +
-        "<th>Modalidad</th>" +
-        "<th>Intensidad</th>" +
-        "<th>Estado</th>" +
-        "</thead>" +
-        "<tbody>";
+    let texto = '';
+    if (listadoCursos === 'No se encontraron cursos') {
+        texto = listadoCursos;
+    }else{
+        texto = "<table class='table table-striped table-hover'>" +
+            "<thead class='thead-dark'>" +
+            "<th>ID</th>" +
+            "<th>Nombre</th>" +
+            "<th>Descripción</th>" +
+            "<th>Valor</th>" +
+            "<th>Modalidad</th>" +
+            "<th>Intensidad</th>" +
+            "<th>Estado</th>" +
+            "</thead>" +
+            "<tbody>";
 
-    listadoCursos.forEach(curso => {
-        texto += '<tr>' +
-            '<td>' + curso.id + '</td>' +
-            '<td>' + curso.nombre + '</td>' +
-            '<td>' + curso.descripcion + '</td>' +
-            '<td>' + curso.valor + '</td>' +
-            '<td>' + curso.modalidad + '</td>' +
-            '<td>' + curso.intensidad_horaria + '</td>' +
-            '<td>' + curso.estado + '</td>' +
-            '</tr>';
-    });
-    texto += '</tbody>' +
-        '</table>';
+        listadoCursos.forEach(curso => {
+            texto += '<tr>' +
+                '<td>' + curso.id + '</td>' +
+                '<td>' + curso.nombre + '</td>' +
+                '<td>' + curso.descripcion + '</td>' +
+                '<td>' + curso.valor + '</td>' +
+                '<td>' + curso.modalidad + '</td>' +
+                '<td>' + curso.intensidad_horaria + '</td>' +
+                '<td>' + curso.estado + '</td>' +
+                '</tr>';
+        });
+        texto += '</tbody>' +
+            '</table>';
+    }
+    
     return texto;
 });
 
 hbs.registerHelper('listar_interesado', (listadoCursos) => {
-    
-    let texto = '<div class="accordion" id="accordionExample">';
-
-    listadoCursos.forEach(curso => {
-        if (curso.estado === 'disponible') {
-            texto += `<div class="card">
-                        <div class="card-header" id="heading${curso.id}">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${curso.id}" aria-expanded="true" aria-controls="collapseOne">
-                                <strong>Nombre del Curso: ${curso.nombre}</strong> - $ ${curso.valor}
-                            </button>
-                        </h2>
-                        </div>
-
-                        <div id="collapse${curso.id}" class="collapse" aria-labelledby="heading${curso.id}" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <strong>Nombre: </strong> ${curso.nombre} <br/>
-                                <strong>Valor: </strong> $${curso.valor} <br/>
-                                <strong>Descripción: </strong> ${curso.descripcion} <br/>
-                                <strong>Modalidad: </strong>${curso.modalidad} <br/>
-                                <strong>Intensidad Horaria: </strong>${curso.intensidad_horaria} <br/>
+    let texto = '';
+    if (listadoCursos === 'No se encontraron cursos') {
+        texto = listadoCursos;
+    } else {
+        listadoCursos.forEach(curso => {
+            if (curso.estado === 'disponible') {
+                texto += `<div class="card">
+                            <div class="card-header" id="heading${curso.id}">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${curso.id}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>Nombre del Curso: ${curso.nombre}</strong> - $ ${curso.valor}
+                                </button>
+                            </h2>
                             </div>
-                        </div>
-                     </div>`;
-        }
-    });
-    texto += '</div>';
+
+                            <div id="collapse${curso.id}" class="collapse" aria-labelledby="heading${curso.id}" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <strong>Nombre: </strong> ${curso.nombre} <br/>
+                                    <strong>Valor: </strong> $${curso.valor} <br/>
+                                    <strong>Descripción: </strong> ${curso.descripcion} <br/>
+                                    <strong>Modalidad: </strong>${curso.modalidad} <br/>
+                                    <strong>Intensidad Horaria: </strong>${curso.intensidad_horaria} <br/>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+        });
+        texto += '</div>';
+    }
     return texto;
 });
 

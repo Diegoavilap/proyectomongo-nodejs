@@ -23,9 +23,7 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/crearCursos', (req, res) => {
-    res.render('crear_cursos', {
-        success: 'false'
-    });
+    res.render('crear_cursos');
 });
 
 app.post('/crearCursos', (req, res) => {
@@ -38,17 +36,31 @@ app.post('/crearCursos', (req, res) => {
         intensidad_horaria: req.body.intensidad_horaria,
         estado: "disponible",
     });
-    curso.save((error, result) => {
-        if (error) {
-            res.render('crear_cursos', {
-                success: error
-            });
+    Curso.findOne({
+        id: curso.id
+    }, (err, resultado) => {
+        if (err) {
+            return console.log("Error al listar el curso");
         }
-        res.render('crear_cursos', {
-            success: 'ok'
-        });
-    })
-    
+        if (resultado != null) {
+            res.render('crear_cursos', {
+                success: "error",
+                message: "No se pueden crear dos cursos con el mismo ID"
+            })
+        }
+        curso.save((error, result) => {
+            if (error) {
+                res.render('crear_cursos', {
+                    success: 'error',
+                    message: error
+                });
+            }
+            res.render('crear_cursos', {
+                success: 'ok',
+                message: 'Registro de Usuario exitoso'
+            });
+        })
+    });   
 });
 
 app.get('/listarCursos', (req, res) => {
@@ -56,9 +68,9 @@ app.get('/listarCursos', (req, res) => {
         if (err) {
             return console.log('error al listar cursos' + err)
         }
-        if (!resultado) {
+        if (resultado.length == 0) {
             res.render('listar', {
-                listado: "No se encontraron cursos"
+                listadoCursos: "No se encontraron cursos"
             })
         }
         console.log(resultado);
