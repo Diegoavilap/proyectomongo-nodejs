@@ -30,6 +30,7 @@ mongoose.connect(process.env.URLDB, {useNewUrlParser: true}, (err, resultado) =>
 		return console.log(err)
 	}
 	console.log("conectado")
+	console.log(process.env.URLDB)
 });
 
 app.listen(process.env.PORT, () =>{

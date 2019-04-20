@@ -3,9 +3,9 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 
 let urlDB
 if (process.env.NODE_ENV === 'local') {
-    urlDB = 'mongodb://localhost:27017/asignaturas';
+    urlDB = 'mongodb+srv://diegoavilap:m0ng0DB_@cluster0-jbcjx.mongodb.net/cursos?retryWrites=true';
 } else {
-    urlDB = 'mongodb+srv://diegoavilap:m0ng0DB_@proyectomongo-nodejs-jbcjx.mongodb.net/cursosVirtuales?retryWrites=true'
+    urlDB = 'mongodb+srv://diegoavilap:m0ng0DB_@cluster0-jbcjx.mongodb.net/cursos?retryWrites=true'
 }
 
 process.env.URLDB = urlDB
