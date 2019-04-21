@@ -48,19 +48,21 @@ app.post('/crearCursos', (req, res) => {
                 success: "error",
                 message: "No se pueden crear dos cursos con el mismo ID"
             })
-        }
-        curso.save((error, result) => {
-            if (error) {
+        }else{
+            curso.save((error, result) => {
+                if (error) {
+                    res.render('crear_cursos', {
+                        success: 'error',
+                        message: error
+                    });
+                }
                 res.render('crear_cursos', {
-                    success: 'error',
-                    message: error
+                    success: 'ok',
+                    message: 'Registro de Usuario exitoso'
                 });
-            }
-            res.render('crear_cursos', {
-                success: 'ok',
-                message: 'Registro de Usuario exitoso'
             });
-        })
+        }
+        
     });   
 });
 
@@ -96,9 +98,7 @@ app.get('/registro', (req, res) => {
         res.render('registro', {
             listadoCursos: resultado
         });
-    })
-    
-    
+    })    
 });
 
 app.post('/registro', (req, res) => {
@@ -160,9 +160,49 @@ app.post('/registro', (req, res) => {
 });
 
 app.get('/verInscritos', (req, res) => {
-    res.render('inscritos');
+    Curso.find({
+        estado: "disponible"
+    }).exec((err, resultado) => {
+        if (err) {
+            return console.log('error al listar cursos' + err)
+        }
+        if (resultado.length == 0) {
+            res.render('inscritos', {
+                success: "error",
+                message: "No se encontraron cursos"
+            })
+        }
+        
+        Inscripcion.find()
+        .exec((err, resultadoInscripcion) => {
+            if (err) {
+                return console.log("Error al listar las inscripciones");
+            }
+            if (resultadoInscripcion.length == 0) {
+                res.render('inscritos', {
+                    success: "error",
+                    message: "No se encontraron Inscripciones"
+                })
+            } else {
+                res.render('inscritos',{
+                    listadoCursos: resultado,
+                    inscripciones: resultadoInscripcion
+                });
+            }
+
+        });
+    })
 });
 
+app.post('/cerrarCurso', (req, res) => {
+    Curso.findOneAndUpdate({_id: req.body.id}, {estado: 'cerrado'}, {new: true}, (error, resultado) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('hey');
+        res.redirect('/verInscritos');
+    });
+});
 
 app.get('*', (req, res) => {
     res.render('error', {

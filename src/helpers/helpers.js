@@ -121,21 +121,23 @@ hbs.registerHelper('inscripcionExitosa', (success,message) => {
     }
 
 });
-
-hbs.registerHelper('listar_inscritos', () => {
-    listadoCursos = require('./cursos.json');
-    inscripciones = require('./inscripciones.json');
+hbs.registerHelper('listar_inscritos', (listadoCursos, inscripciones) => {
     let texto = '<div class="accordion" id="accordionExample">';
 
     listadoCursos.forEach(curso => {
         if (curso.estado === 'disponible') {
             texto += `<div class="card">
                         <div class="card-header" id="heading${curso.id}">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${curso.id}" aria-expanded="true" aria-controls="collapseOne">
-                                <strong>Nombre del Curso: ${curso.nombre}</strong>
-                            </button>
-                        </h2>
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${curso.id}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>Nombre del Curso: ${curso.nombre}</strong>
+                                </button>
+                                <div class="float-right">
+                                    <form action="/cerrarCurso" method="post">
+                                        <button class="btn btn-warning" name="id" value="${curso._id}">Cerrar Curso</button>
+                                    </form>
+                                </div>
+                            </h2>
                         </div>
                         <div id="collapse${curso.id}" class="collapse" aria-labelledby="heading${curso.id}" data-parent="#accordionExample">
                             <div class="card-body">
@@ -159,7 +161,7 @@ hbs.registerHelper('listar_inscritos', () => {
                         '<td>' + inscripcion.telefono + '</td>' +
                         '<td>' +
                         '<button type="button" class="btn btn-warning">Cerrar</button>' +
-                        '<button type="button" class="btn btn-danger">Eliminar</button>' +
+                        '<form action="/eliminar" method="post"><button class="btn btn-danger">Eliminar</button></form>' +
                         '</td>' +
                         '</tr>';
                 }
