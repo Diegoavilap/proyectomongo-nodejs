@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 offset-md-2">
-                {{{inscripcionExitosa success}}}
+                {{{inscripcionExitosa success message}}}
                 <form action="/registro" method="POST" class="form-horizontal" role="form">
                     <div class="form-group">
                         <legend>Formulario para Registrarse en un Curso</legend>
@@ -36,7 +36,7 @@
                         <div class="col-sm-4">
                             <select class="form-control" id="curso_id" name="curso_id" required>
                                 <option>-</option>
-                                {{{opciones_cursos}}}
+                                {{{opciones_cursos listadoCursos}}}
                             </select>
                         </div>
                     </div>

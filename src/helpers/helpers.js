@@ -62,13 +62,14 @@ hbs.registerHelper('listar_interesado', (listadoCursos) => {
     if (listadoCursos === 'No se encontraron cursos') {
         texto = listadoCursos;
     } else {
+        texto = '<div class="accordion" id="accordionExample">';
         listadoCursos.forEach(curso => {
             if (curso.estado === 'disponible') {
                 texto += `<div class="card">
                             <div class="card-header" id="heading${curso.id}">
                             <h2 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${curso.id}" aria-expanded="true" aria-controls="collapseOne">
-                                    <strong>Nombre del Curso: ${curso.nombre}</strong> - $ ${curso.valor}
+                                    <strong>Nombre del Curso: ${curso.nombre}</strong> - ${curso.descripcion} - $ ${curso.valor}
                                 </button>
                             </h2>
                             </div>
@@ -90,8 +91,7 @@ hbs.registerHelper('listar_interesado', (listadoCursos) => {
     return texto;
 });
 
-hbs.registerHelper('opciones_cursos', () => {
-    listadoCursos = require('./cursos.json');
+hbs.registerHelper('opciones_cursos', (listadoCursos) => {
     let texto = '';
     listadoCursos.forEach(curso => {
         texto += `<option value="${curso.id}">${curso.nombre}</option>`;
@@ -99,19 +99,18 @@ hbs.registerHelper('opciones_cursos', () => {
     return texto;
 });
 
-hbs.registerHelper('inscripcionExitosa', (success) => {
-    console.log('helper', success);
+hbs.registerHelper('inscripcionExitosa', (success,message) => {
     if (success === 'ok') {
         let texto = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Registro en el curso exitoso!</strong>
+                    <strong>${message}!</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                  </div>`;
         return texto;
-    } else if (success === 'ya_existe') {
+    } else if (success === 'error') {
         let texto = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>Ya se encuentra registrado en el curso!</strong>
+                    <strong>${message}</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

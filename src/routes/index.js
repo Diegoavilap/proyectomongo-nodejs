@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const hbs = require('hbs')
 const Curso = require('../models/curso');
+const Inscripcion = require('../models/inscripcion');
 const dirViews = path.join(__dirname, '../../template/views');
 const dirPartials = path.join(__dirname, '../../template/partials');
 
@@ -81,16 +82,81 @@ app.get('/listarCursos', (req, res) => {
 });
 
 app.get('/registro', (req, res) => {
-    res.render('registro', {
-        success: 'false'
-    });
+    Curso.find({
+        estado: "disponible"
+    }).exec((err, resultado) => {
+        if (err) {
+            return console.log('error al listar cursos' + err)
+        }
+        if (resultado.length == 0) {
+            res.render('registro', {
+                listadoCursos: "No se encontraron cursos"
+            })
+        }
+        res.render('registro', {
+            listadoCursos: resultado
+        });
+    })
+    
+    
 });
 
 app.post('/registro', (req, res) => {
-
-    res.render('registro', {
-        success: funciones.registrar(req.body)
+    let inscripcion = new Inscripcion({
+        curso_id: req.body.curso_id,
+        cedula: req.body.cedula,
+        nombre: req.body.nombre,
+        correo: req.body.correo,
+        telefono: req.body.telefono
     });
+
+    Curso.find({
+        estado: "disponible"
+    }).exec((err, resultado) => {
+        if (err) {
+            return console.log('error al listar cursos' + err)
+        }
+        if (resultado.length == 0) {
+            res.render('registro', {
+                success: "error",
+                message: "No se encontraron cursos",
+                listadoCursos: ""
+            })
+        }
+        Inscripcion.findOne({
+            curso_id: inscripcion.curso_id,
+            cedula: inscripcion.cedula
+        }, (err, resultadoInscripcion) => {
+            if (err) {
+                return console.log("Error al listar la inscripción");
+            }
+            if (resultadoInscripcion != null) {
+                res.render('registro', {
+                    success: "error",
+                    message: "Ya se encuentra registrado en el curso",
+                    listadoCursos: resultado
+                });
+            }else{
+                inscripcion.save((error, result) => {
+                    if (error) {
+                        res.render('registro', {
+                            success: 'error',
+                            message: error,
+                            listadoCursos: resultado
+                        });
+                    }
+                    res.render('registro', {
+                        success: 'ok',
+                        message: 'Registro en el curso exitoso',
+                        listadoCursos: resultado
+                    });
+                })
+            }
+            
+        });
+    })
+
+    
 });
 
 app.get('/verInscritos', (req, res) => {
