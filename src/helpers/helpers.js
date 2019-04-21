@@ -154,16 +154,17 @@ hbs.registerHelper('listar_inscritos', (listadoCursos, inscripciones) => {
 
             inscripciones.forEach(inscripcion => {
                 if (curso.id === inscripcion.curso_id) {
-                    texto += '<tr>' +
-                        '<td>' + inscripcion.cedula + '</td>' +
-                        '<td>' + inscripcion.nombre + '</td>' +
-                        '<td>' + inscripcion.correo + '</td>' +
-                        '<td>' + inscripcion.telefono + '</td>' +
-                        '<td>' +
-                        '<button type="button" class="btn btn-warning">Cerrar</button>' +
-                        '<form action="/eliminar" method="post"><button class="btn btn-danger">Eliminar</button></form>' +
-                        '</td>' +
-                        '</tr>';
+                    texto += `<tr> 
+                        <td> ${inscripcion.cedula} </td>
+                        <td> ${inscripcion.nombre} </td>
+                        <td> ${inscripcion.correo} </td>
+                        <td> ${inscripcion.telefono} </td>
+                        <td>
+                            <form action="/eliminarInscripcion" method="post" >
+                                <button class="btn btn-danger" name="id" value="${inscripcion._id}">Eliminar Inscripción</button>
+                            </form>
+                        </td>
+                        </tr>`;
                 }
             });
             texto += `</tbody>

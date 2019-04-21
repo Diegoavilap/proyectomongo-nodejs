@@ -203,6 +203,15 @@ app.post('/cerrarCurso', (req, res) => {
         res.redirect('/verInscritos');
     });
 });
+app.post('/eliminarInscripcion', (req, res) => {
+    Inscripcion.findOneAndDelete({_id: req.body.id}, (error, resultado) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('hey' + req.body.id);
+        res.redirect('/verInscritos');
+    });
+});
 
 app.get('*', (req, res) => {
     res.render('error', {
