@@ -17,7 +17,7 @@ npm install
 Correr la apliación es facil!, solo corre:
 
 ```
-node start
+npm run start
 ```
 
 Para Inscribirse es necesario diligenciar el formulario de Registro que aparece en la pagina principal de la aplicación
