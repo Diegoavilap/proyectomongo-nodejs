@@ -14,7 +14,7 @@ npm install
 ```
 
 ## Uso
-Correr la apliación es facil, si quiere listar los cursos solo corre:
+Correr la apliación es facil!, solo corre:
 
 ```
 node start
