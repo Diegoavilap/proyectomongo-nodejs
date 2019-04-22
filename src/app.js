@@ -4,6 +4,8 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+var MemoryStore = require('memorystore')(session);
 
 const directorioPublico = path.join(__dirname, '../public');
 
@@ -16,6 +18,25 @@ app.use('/js', express.static(dirNode_modules + '/popper.js/dist'));
 app.use('/js', express.static(dirNode_modules + '/bootstrap/dist/js'));
 
 app.use(express.static(directorioPublico));
+
+app.use(session({
+	cookie: { maxAge: 86400000 },
+ 	store: new MemoryStore({
+	checkPeriod: 86400000 // prune expired entries every 24h
+	}),
+	secret: 'keyboard cat',
+	resave: true,
+	saveUninitialized: true
+}));
+
+app.use((req, res, next) =>{
+	if (req.session.usuario) {
+		res.locals.sesion = true
+		res.locals.nombre = req.session.nombre
+		res.locals.tipo = req.session.tipo
+	}
+	next()
+});
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -30,7 +51,6 @@ mongoose.connect(process.env.URLDB, {useNewUrlParser: true}, (err, resultado) =>
 		return console.log(err)
 	}
 	console.log("conectado")
-	console.log(process.env.URLDB)
 });
 
 app.listen(process.env.PORT, () =>{

@@ -22,22 +22,25 @@ hbs.registerHelper('registroCursoExitoso', (success, message) => {
 
 });
 
-hbs.registerHelper('listar', (listadoCursos) => {
+hbs.registerHelper('listar', (listadoCursos, tipo) => {
     let texto = '';
     if (listadoCursos === 'No se encontraron cursos') {
         texto = listadoCursos;
-    }else{
-        texto = "<table class='table table-striped table-hover'>" +
-            "<thead class='thead-dark'>" +
-            "<th>ID</th>" +
-            "<th>Nombre</th>" +
-            "<th>Descripción</th>" +
-            "<th>Valor</th>" +
-            "<th>Modalidad</th>" +
-            "<th>Intensidad</th>" +
-            "<th>Estado</th>" +
-            "</thead>" +
-            "<tbody>";
+    } else if (tipo === 'coordinador') {
+        texto = `
+        <div class="container">
+            <h1>Ver Cursos Como Administrador</h1>
+            <table class='table table-striped table-hover'>
+                <thead class='thead-dark'>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Valor</th>
+                    <th>Modalidad</th>
+                    <th>Intensidad</th>
+                    <th>Estado</th>
+                </thead>
+            <tbody>`;
 
         listadoCursos.forEach(curso => {
             texto += '<tr>' +
@@ -50,19 +53,23 @@ hbs.registerHelper('listar', (listadoCursos) => {
                 '<td>' + curso.estado + '</td>' +
                 '</tr>';
         });
-        texto += '</tbody>' +
-            '</table>';
+        texto += `</tbody>
+            </table>
+        </div>`;
     }
     
     return texto;
 });
 
-hbs.registerHelper('listar_interesado', (listadoCursos) => {
+hbs.registerHelper('listar_interesado', (listadoCursos, tipo) => {
     let texto = '';
     if (listadoCursos === 'No se encontraron cursos') {
         texto = listadoCursos;
-    } else {
-        texto = '<div class="accordion" id="accordionExample">';
+    } else if(tipo === 'aspirante'){
+        texto = `
+        <div class="container">
+            <h1>Ver Cursos Como Interesado</h1>
+            <div class="accordion" id="accordionExample">`;
         listadoCursos.forEach(curso => {
             if (curso.estado === 'disponible') {
                 texto += `<div class="card">
@@ -86,7 +93,8 @@ hbs.registerHelper('listar_interesado', (listadoCursos) => {
                         </div>`;
             }
         });
-        texto += '</div>';
+        texto += `</div>
+        </div>`;
     }
     return texto;
 });
@@ -174,5 +182,32 @@ hbs.registerHelper('listar_inscritos', (listadoCursos, inscripciones) => {
                      </div>`;
         }
     });
+    return texto;
+});
+
+hbs.registerHelper('links_por_tipo_de_usuario', (tipo) =>{
+    let texto = '';
+    if (tipo === 'aspirante') {
+        texto += `
+            <li class="nav-item">
+                <a class="nav-link" href="/listarCursos">Listar Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/registro">Inscribirse</a>
+            </li>
+        `; 
+    } else if (tipo === 'coordinador') {
+        texto += `
+            <li class="nav-item">
+                <a class="nav-link" href="/listarCursos">Listar Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/crearCursos">Crear Cursos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/verInscritos">Ver Inscritos</a>
+            </li>
+        `;
+    }
     return texto;
 });

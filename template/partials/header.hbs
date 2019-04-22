@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" sizes="32x32" type="image/png" href="https://nodejs.org/static/favicon.png">
     <title>Proyecto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--Bootstrap css -->
@@ -17,22 +18,28 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/crearCursos">Crear Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/listarCursos">Listar Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/registro">Inscribirse</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/verInscritos">Ver Inscritos</a>
-                    </li>
+                    {{{links_por_tipo_de_usuario tipo}}}
                 </ul>
+                <p>{{tipos}}</p>
+                {{#if sesion}}
+                    <div class="float-right">
+                        <form action="/salir" method="get" class="form-inline my-2 my-lg-0">
+                            <h3>{{nombre}} </h3><span> </span>
+                            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Salir</button>
+                        </form>
+                    </div>
+                {{else}}
+                    <div class="float-right">
+                        <form action="/login" method="post" class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="text" name="cedula" placeholder="Documento de Identidad" aria-label="cedula">
+                            <input class="form-control mr-sm-2" type="password" name="password" placeholder="password" aria-label="password">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+                        </form>
+                    </div>
+                {{/if}}
             </div>
         </nav>
