@@ -19,18 +19,20 @@ const usuariosSchema = new Schema({
     correo: {
         type: String,
         require: true,
-        unique: true
+        trim: true
     },
     telefono: {
         type: String,
         require: true
     },
-    tipo:{
+    tipo: {
         type: String,
         default: 'aspirante',
-        require:true,
-        enum: {values: ['aspirante', 'coordinador']},
-        
+        require: true,
+        enum: {
+            values: ['aspirante', 'coordinador']
+        },
+
     }
 });
 const Usuario = mongoose.model('Usuario', usuariosSchema);

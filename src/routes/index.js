@@ -11,6 +11,9 @@ const Usuario = require('../models/usuario');
 const dirViews = path.join(__dirname, '../../template/views');
 const dirPartials = path.join(__dirname, '../../template/partials');
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 require('./../helpers/helpers')
 
 app.set('view engine', 'hbs');
@@ -49,7 +52,7 @@ app.post('/crearCursos', (req, res) => {
                 success: "error",
                 message: "No se pueden crear dos cursos con el mismo ID"
             })
-        }else{
+        } else {
             curso.save((error, result) => {
                 if (error) {
                     res.render('crear_cursos', {
@@ -59,16 +62,16 @@ app.post('/crearCursos', (req, res) => {
                 }
                 res.render('crear_cursos', {
                     success: 'ok',
-                    message: 'Registro del Curso ' + curso.nombre + ' exitoso' 
+                    message: 'Registro del Curso ' + curso.nombre + ' exitoso'
                 });
             });
         }
-        
-    });   
+
+    });
 });
 
 app.get('/listarCursos', (req, res) => {
-    let estadoCursos =  {};
+    let estadoCursos = {};
     if (req.session.tipo === 'aspirante') {
         estadoCursos = {
             estado: "disponible"
@@ -104,7 +107,7 @@ app.get('/registro', (req, res) => {
         res.render('registro', {
             listadoCursos: resultado
         });
-    })    
+    })
 });
 
 app.post('/registro', (req, res) => {
@@ -142,7 +145,7 @@ app.post('/registro', (req, res) => {
                     message: "Ya se encuentra registrado en el curso",
                     listadoCursos: resultado
                 });
-            }else{
+            } else {
                 inscripcion.save((error, result) => {
                     if (error) {
                         res.render('registro', {
@@ -158,11 +161,11 @@ app.post('/registro', (req, res) => {
                     });
                 })
             }
-            
+
         });
     })
 
-    
+
 });
 
 app.get('/verInscritos', (req, res) => {
@@ -178,30 +181,36 @@ app.get('/verInscritos', (req, res) => {
                 message: "No se encontraron cursos"
             })
         }
-        
-        Inscripcion.find()
-        .exec((err, resultadoInscripcion) => {
-            if (err) {
-                return console.log("Error al listar las inscripciones");
-            }
-            if (resultadoInscripcion.length == 0) {
-                res.render('inscritos', {
-                    success: "error",
-                    message: "No se encontraron Inscripciones"
-                })
-            } else {
-                res.render('inscritos',{
-                    listadoCursos: resultado,
-                    inscripciones: resultadoInscripcion
-                });
-            }
 
-        });
+        Inscripcion.find()
+            .exec((err, resultadoInscripcion) => {
+                if (err) {
+                    return console.log("Error al listar las inscripciones");
+                }
+                if (resultadoInscripcion.length == 0) {
+                    res.render('inscritos', {
+                        success: "error",
+                        message: "No se encontraron Inscripciones"
+                    })
+                } else {
+                    res.render('inscritos', {
+                        listadoCursos: resultado,
+                        inscripciones: resultadoInscripcion
+                    });
+                }
+
+            });
     })
 });
 
 app.post('/cerrarCurso', (req, res) => {
-    Curso.findOneAndUpdate({_id: req.body.id}, {estado: 'cerrado'}, {new: true}, (error, resultado) => {
+    Curso.findOneAndUpdate({
+        _id: req.body.id
+    }, {
+        estado: 'cerrado'
+    }, {
+        new: true
+    }, (error, resultado) => {
         if (error) {
             return console.log(error);
         }
@@ -210,7 +219,9 @@ app.post('/cerrarCurso', (req, res) => {
     });
 });
 app.post('/eliminarInscripcion', (req, res) => {
-    Inscripcion.findOneAndDelete({_id: req.body.id}, (error, resultado) => {
+    Inscripcion.findOneAndDelete({
+        _id: req.body.id
+    }, (error, resultado) => {
         if (error) {
             return console.log(error);
         }
@@ -249,7 +260,7 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/salir', (req, res) => {
-    req.session.destroy((error) =>{
+    req.session.destroy((error) => {
         if (error) return console.log('destroy session error ' + error)
     })
     res.redirect('/')
@@ -264,6 +275,13 @@ app.post('/registroUsuario', (req, res) => {
         password: bcrypt.hashSync(req.body.password, 10),
         tipo: req.body.tipo
     });
+    const msg = {
+        to: req.body.correo,
+        from: 'diegoavilapava@mongoprojecttdea.com',
+        subject: 'Welcome to MongoProject Tdea - NodeJS',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong style="color: blue;">Welcome to the Jungle 🤟 ' + req.body.nombre + '!</strong>',
+    };
     Usuario.findOne({
         cedula: usuario.cedula
     }, (err, resultadoInscripcion) => {
@@ -273,7 +291,7 @@ app.post('/registroUsuario', (req, res) => {
         if (resultadoInscripcion != null) {
             res.render('index', {
                 success: "error",
-                message: usuario.nombre  + " ya se encuentra registrado!"
+                message: usuario.nombre + " ya se encuentra registrado!"
             });
         } else {
             usuario.save((error, result) => {
@@ -282,10 +300,11 @@ app.post('/registroUsuario', (req, res) => {
                         success: 'error',
                         message: error
                     });
-                }else{
+                } else {
+                    sgMail.send(msg);
                     res.render('index', {
                         success: 'ok',
-                        message: 'Registro exitoso del usuario ' + usuario.nombre +'!'
+                        message: 'Registro exitoso del usuario ' + usuario.nombre + '!'
                     });
                 }
             })
