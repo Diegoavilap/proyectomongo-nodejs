@@ -301,6 +301,7 @@ app.post('/registroUsuario', (req, res) => {
                         message: error
                     });
                 } else {
+                    console.log(process.env.SENDGRID_API_KEY);
                     sgMail.send(msg);
                     res.render('index', {
                         success: 'ok',
